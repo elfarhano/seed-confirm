@@ -7,6 +7,7 @@
             inputAccountNumber = $('input[name=seed-confirm-account-number]');
             inputDate = $('#seed-confirm-date');
             inputSlip = $('#seed-confirm-slip');
+            inputReference = $('#seed-confirm-reference');
 
 			var optionOrderSelected = $('#seed-confirm-order option:selected');
 
@@ -30,6 +31,13 @@
 
 			formSeedConfirm.on( 'submit', function ( event ) {
 				var hasError = false;
+				
+				if ( inputReference.hasClass( 'required' ) && $.trim( inputName.val() ) == '' ) {
+					inputReference.addClass('-invalid');
+					hasError = true;
+				} else {
+					inputReference.removeClass('-invalid');
+				}
 
 				if ( inputName.hasClass( 'required' ) && $.trim( inputName.val() ) == '' ) {
 					inputName.addClass('-invalid');
