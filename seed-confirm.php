@@ -259,11 +259,20 @@ function seed_confirm_shortcode( $atts ) {
 				<label for="seed-confirm-name"><?php esc_html_e( 'Name', 'seed-confirm' ); ?></label>
 				<input class="form-control <?php if( isset( $seed_confirm_required['seed_confirm_name'] )){ echo 'required';} ?>" type="text" id="seed-confirm-name" name="seed-confirm-name" value="<?php echo esc_html( $seed_confirm_name ); ?>" />
 			</div>	
+			
 			<div class="col-sm-6">
 				<label for="seed-confirm-contact"><?php esc_html_e( 'Contact', 'seed-confirm' ); ?></label>
 				<input class="form-control <?php if( isset( $seed_confirm_required['seed_confirm_contact'] )){ echo 'required';} ?>" type="text" id="seed-confirm-contact" name="seed-confirm-contact" value="<?php echo esc_html( $seed_confirm_contact ); ?>" />
 			</div>
 		</div>
+		
+		<div class="form-group row">
+			<div class="col-sm-1">
+				<label for="seed-confirm-reference"><?php esc_html_e( 'Reference', 'seed-confirm' ); ?></label>
+				<input class="form-control <?php if( isset( $seed_confirm_required['seed_confirm_reference'] )){ echo 'required';} ?>" type="text" id="seed-confirm-reference" name="seed-confirm-reference" value="<?php echo esc_html( "Payment Reference/Swift Code"); ?>" />
+			</div>	
+			</div>
+			
 		<div class="form-group row">
 			<div class="col-sm-6">
 				<label for="seed-confirm-order"><?php esc_html_e( 'Order', 'seed-confirm' ); ?></label>
@@ -473,6 +482,7 @@ function seed_confirm_init() {
 			&& wp_verify_nonce( $_POST['_wpnonce'], 'seed-confirm-form-'.$_POST['postid'] ) ):
 
 			$name = $_POST[ 'seed-confirm-name' ];
+			$reference = $_POST[ 'seed-confirm-reference' ];
 			$contact = $_POST[ 'seed-confirm-contact' ];
 			$order_id = $_POST[ 'seed-confirm-order' ];
 			$account_number = array_key_exists( 'seed-confirm-account-number', $_POST) ? $_POST[ 'seed-confirm-account-number' ] : '';
@@ -570,6 +580,9 @@ function seed_confirm_init() {
 
 		if ( ! add_post_meta( $transfer_notification_id, 'seed-confirm-name', $_POST['seed-confirm-name'] , true ) )
 			update_post_meta( $transfer_notification_id, 'seed-confirm-name', $_POST['seed-confirm-name'] );
+			
+		if ( ! add_post_meta( $transfer_notification_id, 'seed-confirm-reference', $_POST['seed-confirm-reference'] , true ) )
+			update_post_meta( $transfer_notification_id, 'seed-confirm-reference', $_POST['seed-confirm-reference'] );	
 
 		if ( ! add_post_meta( $transfer_notification_id, 'seed-confirm-contact', $_POST['seed-confirm-contact'] , true ) )
 			update_post_meta( $transfer_notification_id, 'seed-confirm-contact', $_POST['seed-confirm-contact'] );
@@ -600,7 +613,7 @@ function seed_confirm_init() {
 
 			if( ( $order !== null ) ) {
 
-				$order->update_status('processing', 'order_note');
+				$order->update_status('on-hold', 'order_note');
 			}
 		}
 
